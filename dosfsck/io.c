@@ -19,7 +19,11 @@
 #include <sys/ioctl.h>
 #include <errno.h>
 #include <fcntl.h>
+#ifdef __CYGWIN__
+#include "../fd.h"
+#else
 #include <linux/fd.h>
+#endif //__CYGWIN__
 
 #include "dosfsck.h"
 #include "common.h"
