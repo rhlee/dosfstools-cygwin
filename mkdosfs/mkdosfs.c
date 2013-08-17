@@ -50,9 +50,18 @@
 #include "../version.h"
 
 #include <fcntl.h>
+#ifdef __CYGWIN__
+#include <cygwin/hdreg.h>
+#include <cygwin/fs.h>
+#include "../fd.h"
+// Derived from http://lxr.free-electrons.com/source/include/linux/fs.h#L27
+#define BLOCK_SIZE_BITS 9
+#define BLOCK_SIZE (1<<BLOCK_SIZE_BITS)
+#else
 #include <linux/hdreg.h>
 #include <linux/fs.h>
 #include <linux/fd.h>
+#endif // __CYGWIN__
 #include <endian.h>
 #include <mntent.h>
 #include <signal.h>
@@ -66,12 +75,16 @@
 #include <time.h>
 #include <errno.h>
 
+#ifdef __CYGWIN__
+#include <asm/types.h>
+#else
 #include <linux/version.h>
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0)
 # define __KERNEL__
 # include <asm/types.h>
 # undef __KERNEL__
 #endif
+#endif // __CYGWIN__
 
 #if __BYTE_ORDER == __BIG_ENDIAN
 
